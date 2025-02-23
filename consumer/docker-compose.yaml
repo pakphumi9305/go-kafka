@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: account_container
+    environment:
+      POSTGRES_USER: admin  # ชื่อผู้ใช้ PostgreSQL
+      POSTGRES_PASSWORD: p@ssw0rd  # รหัสผ่านของผู้ใช้ PostgreSQL
+      POSTGRES_DB: account_db  # ชื่อฐานข้อมูลที่ต้องการสร้าง
+    ports:
+      - "5432:5432"  # การแมปพอร์ต 5432 ใน container ไปที่ 5432 ในเครื่องของคุณ
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # การใช้ volume เพื่อเก็บข้อมูลฐานข้อมูล
+
+volumes:
+  postgres_data:  # สร้าง volume ที่จะใช้เก็บข้อมูลของ PostgreSQL
+  
