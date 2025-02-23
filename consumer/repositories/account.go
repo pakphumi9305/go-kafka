@@ -1,6 +1,6 @@
 package repositories
 
-//import "gorm.io/gorm"
+import "gorm.io/gorm"
 
 type BankAccount struct {
 	ID            string
@@ -9,19 +9,44 @@ type BankAccount struct {
 	Balance       float64
 }
 
-type AccountRepositoriy interface {
+type AccountRepository interface {
 	Save(bankAccount BankAccount) error
 	Delete(id string) error
 	FindAll() (bankAccount []BankAccount, err error)
 	FindByID(id string) (bankAccount BankAccount, err error)
 }
 
-// type accountRepository struct {
-// 	db *gorm.DB
-// }
+type accountRepository struct {
+	db *gorm.DB
+}
 
-// func NewAccountRepository(db *gorm.DB) AccountRepository {
-// 	db.Table("test_banks").AutoMigrate(&BankAccount{})
+// Delete implements AccountRepository.
+func (obj accountRepository) Delete(id string) error {
 
-// 	return accountRepository{db}
-// }
+	return obj.db.Where("id =?", id).Delete(&BankAccount{}).Error
+}
+
+// FindAll implements AccountRepository.
+func (obj accountRepository) FindAll() (bankAccount []BankAccount, err error) {
+	err = obj.db.Find(&BankAccount{}).Error
+
+	return bankAccount, err
+}
+
+// FindByID implements AccountRepository.
+func (obj accountRepository) FindByID(id string) (bankAccount BankAccount, err error) {
+	err = obj.db.Where("id=?", id).First(&bankAccount).Error
+
+	return bankAccount, err
+}
+
+// Save implements AccountRepository.
+func (obj accountRepository) Save(bankAccount BankAccount) error {
+	return obj.db.Save(bankAccount).Error
+}
+
+func NewAccountRepository(db *gorm.DB) AccountRepository {
+	db.Table("bank_account").AutoMigrate(&BankAccount{})
+
+	return accountRepository{db}
+}
