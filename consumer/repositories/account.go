@@ -1,6 +1,6 @@
 package repositories
 
-import "gorm.io/gorm"
+//import "gorm.io/gorm"
 
 type BankAccount struct {
 	ID            string
@@ -16,9 +16,9 @@ type AccountRepositoriy interface {
 	FindByID(id string) (bankAccount BankAccount, err error)
 }
 
-type accountRepository struct {
-	db *gorm.DB
-}
+// type accountRepository struct {
+// 	db *gorm.DB
+// }
 
 // func NewAccountRepository(db *gorm.DB) AccountRepository {
 // 	db.Table("test_banks").AutoMigrate(&BankAccount{})
