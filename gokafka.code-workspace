@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "consumer"
+		},
+		{
+			"path": "producer"
 		}
 	],
 	"settings": {}
