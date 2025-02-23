@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
+	"gopkg.in/Shopify/sarama.v1"
 )
 
 func init() {
@@ -21,7 +22,12 @@ func init() {
 }
 
 func main() {
+	consumer, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafka"))
 
+	if err != nil {
+		panic(err)
+	}
+consumer.Consume('')
 }
 
 // func main() {

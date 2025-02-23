@@ -1,0 +1,12 @@
+kafka:
+  servers:
+  - localhost:9092
+  group: accountConsumer
+
+db:
+  driver: postgres
+  host: localhost
+  port: 5432
+  username: admin
+  password: p@ssw0rd
+  database: account_db
