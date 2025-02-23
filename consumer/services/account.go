@@ -23,7 +23,7 @@ func NewAccountEventHandler(accountRepo repositories.AccountRepository) EventHan
 func (obj accountEventHandler) Handle(topic string, eventBytes []byte) {
 	switch topic {
 	case reflect.TypeOf(events.OpenAccontEvent{}).Name():
-		event := events.OpenAccontEvent{}
+		event := &events.OpenAccontEvent{}
 		err := json.Unmarshal(eventBytes, event)
 		if err != nil {
 			log.Println(err)
@@ -43,7 +43,7 @@ func (obj accountEventHandler) Handle(topic string, eventBytes []byte) {
 		}
 
 	case reflect.TypeOf(events.DepositFundEvent{}).Name():
-		event := events.DepositFundEvent{}
+		event := &events.DepositFundEvent{}
 		err := json.Unmarshal(eventBytes, event)
 		if err != nil {
 			log.Println(err)
@@ -65,7 +65,7 @@ func (obj accountEventHandler) Handle(topic string, eventBytes []byte) {
 
 	case reflect.TypeOf(events.WithdrawFundEvent{}).Name():
 
-		event := events.WithdrawFundEvent{}
+		event := &events.WithdrawFundEvent{}
 		err := json.Unmarshal(eventBytes, event)
 		if err != nil {
 			log.Println(err)
@@ -89,7 +89,7 @@ func (obj accountEventHandler) Handle(topic string, eventBytes []byte) {
 		}
 	case reflect.TypeOf(events.CloseAccountEvent{}).Name():
 
-		event := events.CloseAccountEvent{}
+		event := &events.CloseAccountEvent{}
 		err := json.Unmarshal(eventBytes, event)
 		if err != nil {
 			log.Println(err)

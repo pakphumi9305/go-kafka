@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-consumer.Consume('')
+	// consumer.Consume(”)
 }
 
 // func main() {
