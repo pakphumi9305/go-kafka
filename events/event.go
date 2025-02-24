@@ -6,7 +6,11 @@ var Topics = []string{
 	reflect.TypeOf(OpenAccontEvent{}).Name(),
 	reflect.TypeOf(DepositFundEvent{}).Name(),
 	reflect.TypeOf(WithdrawFundEvent{}).Name(),
-	reflect.TypeOf(CloseAccountEvent{}).Name()}
+	reflect.TypeOf(CloseAccountEvent{}).Name(),
+}
+
+type Event interface {
+}
 
 type OpenAccontEvent struct {
 	ID             string
