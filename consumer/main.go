@@ -1,10 +1,18 @@
 package main
 
 import (
+	"consumer/repositories"
+	"consumer/services"
+	"context"
+	"events"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/viper"
 	"gopkg.in/Shopify/sarama.v1"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func init() {
@@ -21,13 +29,45 @@ func init() {
 	}
 }
 
+func initDatabase() *gorm.DB {
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",
+		viper.GetString("db.username"),
+		viper.GetString(("db.password")),
+		viper.GetString("db.host"),
+		viper.GetString("db.port"),
+		viper.GetString("db.database"))
+	dial := postgres.Open(dsn)
+	db, err := gorm.Open(dial, &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
+
+	if err != nil {
+		panic(err)
+
+	}
+
+	return db
+}
+
 func main() {
-	consumer, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafka"))
+	consumer, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafka"), "", nil)
 
 	if err != nil {
 		panic(err)
 	}
-	// consumer.Consume(”)
+
+	defer consumer.Close()
+
+	db := initDatabase()
+
+	accountRepository := repositories.NewAccountRepository(db)
+	accountEventHandler := services.NewAccountEventHandler(accountRepository)
+	accountConsumerHandler := services.NewConsumerHandler(accountEventHandler)
+
+	fmt.Println("account consumer started...")
+	for {
+		consumer.Consume(context.Background(), events.Topics, accountConsumerHandler)
+	}
 }
 
 // func main() {
