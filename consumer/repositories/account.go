@@ -47,6 +47,7 @@ func (obj accountRepository) Save(bankAccount BankAccount) error {
 
 func NewAccountRepository(db *gorm.DB) AccountRepository {
 	db.Table("bank_account").AutoMigrate(&BankAccount{})
+	//db.AutoMigrate(&BankAccount{})
 
 	return accountRepository{db}
 }

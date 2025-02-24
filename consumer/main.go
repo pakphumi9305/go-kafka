@@ -30,7 +30,13 @@ func init() {
 }
 
 func initDatabase() *gorm.DB {
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",
+
+	// 	dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
+	// db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	// "%v:%v@tcp(%v:%v)/%v",
+
+	dsn := fmt.Sprintf("user=%v password=%v host=%v port=%v dbname=%v",
 		viper.GetString("db.username"),
 		viper.GetString(("db.password")),
 		viper.GetString("db.host"),
@@ -50,7 +56,14 @@ func initDatabase() *gorm.DB {
 }
 
 func main() {
-	consumer, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafka"), "", nil)
+
+	// กำหนดการตั้งค่าของ Kafka consumer group
+	config := sarama.NewConfig()
+
+	// กำหนดเวอร์ชันของ Kafka ที่ต้องการใช้ (อย่างน้อย V0_10_2_0 ขึ้นไป)
+	config.Version = sarama.V0_10_2_0
+
+	consumer, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafka.servers"), viper.GetString("kafka.group"), config)
 
 	if err != nil {
 		panic(err)
